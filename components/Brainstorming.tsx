@@ -70,16 +70,16 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
           <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100">
              <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white font-black text-sm">1</div>
-                <h3 className="text-xl font-black text-slate-800 tracking-tight">Identificación</h3>
+                <h3 className="text-xl font-black text-slate-800 tracking-tight">Usuario</h3>
              </div>
 
              <div className="relative">
-                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Usuario / Analista</label>
+                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Nombre del Usuario / Analista</label>
                 <div className="relative">
                   <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                   <input 
                     type="text"
-                    placeholder="Ingrese su nombre de usuario..."
+                    placeholder="Ingrese su nombre o identificación..."
                     className="w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-sky-500 focus:bg-white focus:ring-4 focus:ring-sky-500/5 outline-none font-bold text-slate-700 transition-all"
                     value={usuario}
                     onChange={(e) => setUsuario(e.target.value)}
@@ -96,7 +96,7 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <div>
-                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">País</label>
+                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">País de la Operación</label>
                 <select 
                   className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 py-5 px-6 focus:border-sky-500 focus:bg-white outline-none font-bold text-slate-700 transition-all cursor-pointer"
                   value={selectedCountry}
@@ -106,7 +106,7 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
                 </select>
               </div>
               <div>
-                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Tipo (DOFA)</label>
+                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Tipo de Factor (DOFA)</label>
                 <div className="flex p-1.5 bg-slate-100 rounded-[1.2rem] h-full items-center">
                   {(Object.keys(TYPE_LABELS) as DofaType[]).map((key) => (
                     <button
@@ -131,7 +131,7 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
 
             <div className="space-y-8">
               <div>
-                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Selección de Factor</label>
+                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Selección de Factor Crítico</label>
                 <select 
                   className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 py-5 px-6 focus:border-sky-500 focus:bg-white outline-none font-bold text-slate-700 transition-all cursor-pointer"
                   value={selectedFactorId}
@@ -148,7 +148,7 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
                 <div className={`p-6 rounded-[1.8rem] border-2 ${TYPE_COLORS[selectedType]} flex gap-4 animate-in slide-in-from-top-4 duration-500 shadow-sm`}>
                   <Info className="shrink-0 mt-1 opacity-70" size={24} />
                   <div>
-                    <p className="text-[10px] font-black uppercase mb-1 opacity-60 tracking-wider">Contexto:</p>
+                    <p className="text-[10px] font-black uppercase mb-1 opacity-60 tracking-wider">Análisis de Contexto:</p>
                     <p className="text-sm font-semibold leading-relaxed">{currentFactor.description}</p>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
 
               <div className="pt-4">
                 <div className="flex justify-between items-center mb-6">
-                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Impacto</label>
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Valoración de Impacto</label>
                   <div className={`px-4 py-1.5 rounded-xl font-black text-sm uppercase transition-all duration-500 shadow-sm ${impact >= 4 ? 'bg-red-500 text-white' : impact === 3 ? 'bg-amber-500 text-white' : 'bg-slate-900 text-white'}`}>
                     {IMPACT_LABELS[impact]} ({impact})
                   </div>
@@ -174,14 +174,14 @@ const Brainstorming: React.FC<BrainstormingProps> = ({ onAddRecord }) => {
 
         <div className="space-y-8">
           <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl shadow-slate-900/40 sticky top-10 border border-slate-800">
-            <h3 className="text-2xl font-black mb-8 tracking-tighter text-sky-400">Resumen Registro</h3>
+            <h3 className="text-2xl font-black mb-8 tracking-tighter text-sky-400">Resumen Estratégico</h3>
             <div className="space-y-6">
               <div className="bg-white/5 p-6 rounded-3xl border border-white/5">
-                <p className="text-[10px] uppercase font-black text-slate-500 mb-2 tracking-[0.2em]">Usuario</p>
+                <p className="text-[10px] uppercase font-black text-slate-500 mb-2 tracking-[0.2em]">Usuario Registra</p>
                 <p className="font-bold text-lg text-slate-100 truncate">{usuario || '---'}</p>
               </div>
               <div className="bg-white/5 p-6 rounded-3xl border border-white/5">
-                <p className="text-[10px] uppercase font-black text-slate-500 mb-2 tracking-[0.2em]">Factor</p>
+                <p className="text-[10px] uppercase font-black text-slate-500 mb-2 tracking-[0.2em]">Factor Clave</p>
                 <p className="font-bold text-lg text-slate-100 truncate">{currentFactor?.factor || '---'}</p>
               </div>
             </div>

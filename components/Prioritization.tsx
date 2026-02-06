@@ -114,6 +114,11 @@ const Prioritization: React.FC<PrioritizationProps> = ({ records, onUpdateRecord
                   )}
                 </React.Fragment>
               ))}
+              {prioritizedRecords.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="py-20 text-center text-slate-400 italic">No hay factores críticos registrados para priorizar.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -155,7 +160,10 @@ const ActionManager: React.FC<{
            <ClipboardList className="text-sky-600" size={24} />
            <h4 className="text-2xl font-black text-slate-900 uppercase italic tracking-tight">Plan de Gestión</h4>
         </div>
-        <button onClick={addAction} className="bg-slate-900 text-sky-400 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2 shadow-lg">
+        <button 
+          onClick={addAction} 
+          className="bg-slate-900 text-sky-400 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2 shadow-lg"
+        >
           <Plus size={18} /> Nueva Acción
         </button>
       </div>
@@ -165,7 +173,6 @@ const ActionManager: React.FC<{
           localActions.map((action, idx) => (
             <div key={action.id} className="group relative bg-slate-50 rounded-3xl p-6 border-2 border-slate-100 hover:border-sky-200 transition-all">
               <div className="flex flex-col lg:flex-row gap-6">
-                {/* Info Principal */}
                 <div className="flex-1 space-y-4">
                   <div className="flex items-center gap-3">
                     <span className="w-8 h-8 rounded-lg bg-slate-900 text-sky-400 flex items-center justify-center font-black text-xs">{idx + 1}</span>
@@ -202,7 +209,6 @@ const ActionManager: React.FC<{
                   </div>
                 </div>
 
-                {/* Seguimiento */}
                 <div className="lg:w-1/3 space-y-2">
                   <label className="text-[10px] font-black text-sky-600 uppercase tracking-widest ml-1">Seguimiento de Eficacia</label>
                   <div className="relative">
@@ -223,7 +229,7 @@ const ActionManager: React.FC<{
                 <Trash size={16} />
               </button>
             </div>
-          )
+          ))
         ) : (
           <div className="py-12 border-4 border-dashed rounded-[2.5rem] flex flex-col items-center justify-center text-slate-300 italic text-sm">
              <ClipboardList size={40} className="mb-2 opacity-10" />
