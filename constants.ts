@@ -1,5 +1,6 @@
 
-import { Country, DofaFactor } from './types';
+// Fix: Removed non-existent DofaFactor import
+import { Country } from './types';
 
 export const COUNTRIES: (Country & { flag: string })[] = [
   { name: 'Colombia', code: 'COL', flag: '🇨🇴' },
@@ -74,7 +75,7 @@ export const FACTOR_TEMPLATES: Record<string, Record<string, string[]>> = {
       'Huella de carbono de las operaciones',
       'Gestión de aguas oleosas y sentinas',
       'Mantenimiento preventivo con enfoque ambiental',
-      'Programas de mejora ambiental y eficiencia operativa',
+      'Programas de mejora ambiental and eficiencia operativa',
       'Gestión y cumplimiento de la huella hídrica en operaciones',
       'Cumplimiento de normativa ambiental marítima (MARPOL / local)',
       'Gestión ambiental de proveedores críticos'
