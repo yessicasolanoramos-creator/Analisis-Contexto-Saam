@@ -1,151 +1,285 @@
 
 import { Country, DofaFactor } from './types';
 
-export const COUNTRIES: Country[] = [
-  { name: 'Colombia', code: 'COL' },
-  { name: 'México', code: 'MEX' },
-  { name: 'Chile', code: 'CHL' },
-  { name: 'Perú', code: 'PER' },
-  { name: 'Ecuador', code: 'ECU' },
-  { name: 'Argentina', code: 'ARG' }
+export const COUNTRIES: (Country & { flag: string })[] = [
+  { name: 'Colombia', code: 'COL', flag: '🇨🇴' },
+  { name: 'Ecuador', code: 'ECU', flag: '🇪🇨' },
+  { name: 'Panamá', code: 'PAN', flag: '🇵🇦' },
+  { name: 'Costa Rica', code: 'CRI', flag: '🇨🇷' },
+  { name: 'Guatemala', code: 'GUA', flag: '🇬🇹' },
+  { name: 'El Salvador', code: 'SLV', flag: '🇸🇻' }
 ];
 
-export const PREDEFINED_FACTORS: DofaFactor[] = [
-  // FORTALEZAS (F)
-  { id: 'f1', type: 'F', factor: 'Cultura de cumplimiento de procesos', description: 'Alta adherencia a los manuales y normativas internas.' },
-  { id: 'f2', type: 'F', factor: 'Turnos 1x1', description: 'Esquema operativo optimizado para la continuidad del servicio.' },
-  { id: 'f3', type: 'F', factor: 'Equidad de género en la operación a bordo', description: 'Inclusión efectiva de mujeres en roles operativos críticos.' },
-  { id: 'f4', type: 'F', factor: 'Contratación sectorizada por regiones', description: 'Vinculación de talento local que reduce costos.' },
-  { id: 'f5', type: 'F', factor: 'Récord de no impactos al mar o río', description: 'Historial impecable en prevención de contaminación.' },
-  { id: 'f6', type: 'F', factor: 'Presencia en principales puertos del país', description: 'Cobertura geográfica estratégica.' },
-  { id: 'f7', type: 'F', factor: 'Capacidad de flota idónea Guayaquil', description: 'Equipamiento adecuado para la zona.' },
-  { id: 'f8', type: 'F', factor: 'Régimen de relevos', description: 'Sistema estructurado que garantiza descanso.' },
-  { id: 'f9', type: 'F', factor: 'Capacidad financiera del grupo', description: 'Respaldo económico para estabilidad.' },
-  { id: 'f10', type: 'F', factor: 'Dependencia moderada a agentes', description: 'Control directo sobre procesos clave.' },
-  { id: 'f11', type: 'F', factor: 'Mayor participación de mercado', description: 'Liderazgo consolidado.' },
-  { id: 'f12', type: 'F', factor: 'No participar en mercado informal', description: 'Ética comercial y cumplimiento legal.' },
-  { id: 'f13', type: 'F', factor: 'Relaciones con clientes globales', description: 'Fidelización de cuentas internacionales.' },
-  { id: 'f14', type: 'F', factor: 'Posicionamiento en puertos principales', description: 'Disponibilidad inmediata.' },
-  { id: 'f15', type: 'F', factor: 'Operar en situaciones adversas', description: 'Resiliencia ante crisis.' },
-  { id: 'f16', type: 'F', factor: 'Robustez de infraestructura física', description: 'Instalaciones seguras.' },
-  { id: 'f17', type: 'F', factor: 'Cultura de innovación', description: 'Capacidad de adaptación constante.' },
-  { id: 'f18', type: 'F', factor: 'Metodologías de gestión PMO', description: 'Estándares internacionales de ejecución.' },
-  { id: 'f19', type: 'F', factor: 'Relaciones institucionales sólidas', description: 'Imagen pública positiva.' },
-  { id: 'f20', type: 'F', factor: 'Eficiencia en uso de recursos', description: 'Optimización de rentabilidad.' },
-  { id: 'f21', type: 'F', factor: 'Protocolos de cifrado digital', description: 'Protección avanzada contra ciberriesgos.' },
-  { id: 'f22', type: 'F', factor: 'Auditorías internas preventivas', description: 'Control de calidad constante.' },
-  { id: 'f23', type: 'F', factor: 'Comunicación abierta', description: 'Baja conflictividad interna.' },
-  { id: 'f24', type: 'F', factor: 'Mantenimiento preventivo eficaz', description: 'Reducción de paros no programados.' },
-  { id: 'f25', type: 'F', factor: 'Planes de carrera', description: 'Baja fuga de talento.' },
-  { id: 'f26', type: 'F', factor: 'Procesos estandarizados', description: 'Garantía de calidad uniforme.' },
-  { id: 'f27', type: 'F', factor: 'Cero accidentes laborales', description: 'Foco en salud y seguridad.' },
-  { id: 'f28', type: 'F', factor: 'Sistemas integrados ERP', description: 'Visibilidad global de la operación.' },
-  { id: 'f29', type: 'F', factor: 'Disciplina de caja', description: 'Salud financiera y liquidez.' },
-  { id: 'f30', type: 'F', factor: 'Código de ética estricto', description: 'Prevención activa de corrupción.' },
-  { id: 'f31', type: 'F', factor: 'Estructura organizacional clara', description: 'Definición de roles.' },
-  { id: 'f32', type: 'F', factor: 'Planes de continuidad del negocio', description: 'Estrategias de recuperación.' },
-  { id: 'f33', type: 'F', factor: 'Monitoreo en tiempo real', description: 'Control de consumos.' },
-  { id: 'f34', type: 'F', factor: 'Inventario de emisiones', description: 'Medición de huella de carbono.' },
-  { id: 'f35', type: 'F', factor: 'Protocolos residuos', description: 'Gestión responsable de desechos.' },
-
-  // OPORTUNIDADES (O)
-  { id: 'o1', type: 'O', factor: 'Beneficios fiscales RSC', description: 'Aprovechar deducciones por inversión social.' },
-  { id: 'o2', type: 'O', factor: 'Relacionamientos industria', description: 'Influencia sectorial.' },
-  { id: 'o3', type: 'O', factor: 'Motivar stakeholders RSC', description: 'Atraer inversionistas.' },
-  { id: 'o4', type: 'O', factor: 'Best practices filiales ST', description: 'Sinergias internacionales.' },
-  { id: 'o5', type: 'O', factor: 'Vocación exportadora país', description: 'Aumento demanda comercio exterior.' },
-  { id: 'o6', type: 'O', factor: 'Tarifas susceptibles a reajuste', description: 'Potencial mejora márgenes.' },
-  { id: 'o7', type: 'O', factor: 'Estabilidad de cuentas', description: 'Contratos largo plazo.' },
-  { id: 'o8', type: 'O', factor: 'Desarrollo mercados locales', description: 'Expansión zonas.' },
-  { id: 'o9', type: 'O', factor: 'Decisión política orden público', description: 'Mejora seguridad operativa.' },
-  { id: 'o10', type: 'O', factor: 'Eficiencia costos agenciamiento', description: 'Optimización cadena suministro.' },
-  { id: 'o11', type: 'O', factor: 'Economía dolarizada', description: 'Estabilidad monetaria.' },
-  { id: 'o12', type: 'O', factor: 'Redistribución cargas Guayaquil', description: 'Nuevos flujos logísticos.' },
-  { id: 'o13', type: 'O', factor: 'Ampliación Puerto Bolívar', description: 'Crecimiento demanda infraestructura.' },
-  { id: 'o14', type: 'O', factor: 'Empresas practicaje transnacionales', description: 'Nuevas alianzas globales.' },
-  { id: 'o15', type: 'O', factor: 'Terminales petroleros', description: 'Servicios especializados hidrocarburos.' },
-  { id: 'o16', type: 'O', factor: 'Diversificación ingresos', description: 'Nuevas líneas de negocio.' },
-  { id: 'o17', type: 'O', factor: 'Cartera clientes diversificada', description: 'Menor riesgo concentración.' },
-  { id: 'o18', type: 'O', factor: 'Economía circular', description: 'Ventaja producción limpia.' },
-  { id: 'o19', type: 'O', factor: 'Responsabilidad Social', description: 'Posicionamiento marca.' },
-  { id: 'o20', type: 'O', factor: 'Reducción emisiones', description: 'Alineación regulatoria.' },
-  { id: 'o21', type: 'O', factor: 'Restauración ambiental', description: 'Acceso incentivos verdes.' },
-  { id: 'o22', type: 'O', factor: 'Seguros climáticos', description: 'Protección meteorológica.' },
-
-  // DEBILIDADES (D)
-  { id: 'd1', type: 'D', factor: 'Ausencia certificación ambiental', description: 'Falta de ISO 14001.' },
-  { id: 'd2', type: 'D', factor: 'Resistencia cambio cultural', description: 'Barreras adopción procesos.' },
-  { id: 'd3', type: 'D', factor: 'Ausencia mandos medios', description: 'Brecha supervisión.' },
-  { id: 'd4', type: 'D', factor: 'Baja orientación al logro', description: 'Enfoque reactivo.' },
-  { id: 'd5', type: 'D', factor: 'Alta rotación tripulantes', description: 'Pérdida personal especializado.' },
-  { id: 'd6', type: 'D', factor: 'Evaluación ambiental proveedores', description: 'Riesgo reputacional cadena.' },
-  { id: 'd7', type: 'D', factor: 'Valores grupos de interés', description: 'Falta alineación ética.' },
-  { id: 'd8', type: 'D', factor: 'Desempeño proveedores', description: 'Incumplimientos calidad.' },
-  { id: 'd9', type: 'D', factor: 'No conexión a tierra embarcaciones', description: 'Uso ineficiente motores.' },
-  { id: 'd10', type: 'D', factor: 'Confiabilidad flota', description: 'Fallas recurrentes.' },
-  { id: 'd11', type: 'D', factor: 'Tecnología flota ASD-BP', description: 'Limitaciones técnicas.' },
-  { id: 'd12', type: 'D', factor: 'Portafolio cargado al liner', description: 'Dependencia un segmento.' },
-  { id: 'd13', type: 'D', factor: 'Baja inteligencia mercado', description: 'Desconocimiento competencia.' },
-  { id: 'd14', type: 'D', factor: 'Estructura capital local', description: 'Restricciones inversión.' },
-  { id: 'd15', type: 'D', factor: 'Rentabilidad provincias', description: 'Altos costos logísticos.' },
-  { id: 'd16', type: 'D', factor: 'Contratos desactualizados', description: 'Riesgos legales términos.' },
-  { id: 'd17', type: 'D', factor: 'Oferta tripulación calificada', description: 'Dificultad perfiles aptos.' },
-  { id: 'd18', type: 'D', factor: 'Edad flota (25 años)', description: 'Obsolescencia técnica.' },
-  { id: 'd19', type: 'D', factor: 'Backlog mantenimiento', description: 'Retraso reparaciones.' },
-  { id: 'd20', type: 'D', factor: 'NSE en compras e inventario', description: 'Maduración administrativa.' },
-  { id: 'd21', type: 'D', factor: 'Dispatcher 24/7 limitado', description: 'Brechas coordinación.' },
-  { id: 'd22', type: 'D', factor: 'Ausencia ERP clúster', description: 'Fragmentación datos.' },
-  { id: 'd23', type: 'D', factor: 'Ausencia RM Monteverde', description: 'Falta gestión riesgos.' },
-  { id: 'd24', type: 'D', factor: 'Estandarización corporativa', description: 'Diferencias procesos locales.' },
-  { id: 'd25', type: 'D', factor: 'Eventos operacionales', description: 'Incidentes frecuentes.' },
-  { id: 'd26', type: 'D', factor: 'Conservación equipos', description: 'Deterioro acelerado.' },
-  { id: 'd27', type: 'D', factor: 'Cultura orden y aseo', description: 'Impacto seguridad.' },
-  { id: 'd28', type: 'D', factor: 'Ejecución proyectos estratégicos', description: 'Desviaciones PMO.' },
-  { id: 'd29', type: 'D', factor: 'Cumplimiento regulatorio', description: 'Riesgos multas.' },
-  { id: 'd30', type: 'D', factor: 'Obsolescencia mantenimiento', description: 'Falla renovación activos.' },
-  { id: 'd31', type: 'D', factor: 'Gestión de talento', description: 'Insuficiente formación.' },
-  { id: 'd32', type: 'D', factor: 'Políticas desactualizadas', description: 'Manuales obsoletos.' },
-  { id: 'd33', type: 'D', factor: 'Gestión SST', description: 'Deficiencias prevención.' },
-  { id: 'd34', type: 'D', factor: 'Gestión grupos interés', description: 'Conflictos latentes.' },
-  { id: 'd35', type: 'D', factor: 'Integridad reportes', description: 'Datos no fidedignos.' },
-  { id: 'd36', type: 'D', factor: 'Planificación financiera', description: 'Presupuestos irreales.' },
-  { id: 'd37', type: 'D', factor: 'Gestión ambiental operativa', description: 'Prácticas deficientes.' },
-
-  // AMENAZAS (A)
-  { id: 'a1', type: 'A', factor: 'Legislación ambiental laxa', description: 'Competencia desleal costos.' },
-  { id: 'a2', type: 'A', factor: 'Descontento laboral transición', description: 'Huelgas productividad.' },
-  { id: 'a3', type: 'A', factor: 'Negociaciones informales', description: 'Corrupción mercado.' },
-  { id: 'a4', type: 'A', factor: 'Legislación SST rígida', description: 'Normas fuera de contexto.' },
-  { id: 'a5', type: 'A', factor: 'Escasez proveedores calificados', description: 'Incumplimiento estándares.' },
-  { id: 'a6', type: 'A', factor: 'Oferta profesionales mar', description: 'Feroz competencia talento.' },
-  { id: 'a7', type: 'A', factor: 'Orden público control territorial', description: 'Ataques bloqueos.' },
-  { id: 'a8', type: 'A', factor: 'Inestabilidad política', description: 'Amenaza inversión.' },
-  { id: 'a9', type: 'A', factor: 'Brecha cultural-laboral', description: 'Diferencias estilos.' },
-  { id: 'a10', type: 'A', factor: 'Lavado activos regional', description: 'Infiltración criminal.' },
-  { id: 'a11', type: 'A', factor: 'Flota competencia', description: 'Pérdida market share.' },
-  { id: 'a12', type: 'A', factor: 'Balance cargas terminales', description: 'Activos ociosos.' },
-  { id: 'a13', type: 'A', factor: 'Tarifario regulado estático', description: 'Congelamiento precios.' },
-  { id: 'a14', type: 'A', factor: 'Competidores agresivos', description: 'Guerra precios.' },
-  { id: 'a15', type: 'A', factor: 'Cambio política tributaria', description: 'Aumento carga fiscal.' },
-  { id: 'a16', type: 'A', factor: 'Conflicto armado interno', description: 'Violencia operativa.' },
-  { id: 'a17', type: 'A', factor: 'Consecuencias legales seguridad', description: 'Responsabilidad civil grave.' },
-  { id: 'a18', type: 'A', factor: 'Corrupción entes reguladores', description: 'Extorsión favoritismo.' },
-  { id: 'a19', type: 'A', factor: 'Restricciones Canal Panamá', description: 'Alteración rutas.' },
-  { id: 'a20', type: 'A', factor: 'Captación personal externos', description: 'Headhunting competencia.' },
-  { id: 'a21', type: 'A', factor: 'Pilotos preferencia capitanes', description: 'Dependencias personales.' },
-  { id: 'a22', type: 'A', factor: 'Ausencia simuladores', description: 'Riesgo capacitación.' },
-  { id: 'a23', type: 'A', factor: 'Ausencia astillero alto nivel', description: 'Dificultad reparaciones.' },
-  { id: 'a24', type: 'A', factor: 'Sindicatos conflictivos', description: 'Demandas salariales.' },
-  { id: 'a25', type: 'A', factor: 'Desastres naturales', description: 'Clima extremo.' },
-  { id: 'a26', type: 'A', factor: 'Pérdida competitividad tech', description: 'Rezago digital.' },
-  { id: 'a27', type: 'A', factor: 'Entorno regulatorio marítimo', description: 'Nuevas normas OMI.' },
-  { id: 'a28', type: 'A', factor: 'Incremento costos exógenos', description: 'Inflación insumos.' },
-  { id: 'a29', type: 'A', factor: 'Ciberataques externos', description: 'Secuestro datos.' },
-  { id: 'a30', type: 'A', factor: 'Paros terceros', description: 'Interrupción externa.' },
-  { id: 'a31', type: 'A', factor: 'Concentración clientes', description: 'Poder negociación.' },
-  { id: 'a32', type: 'A', factor: 'Estructura naviera', description: 'Cambio mercado global.' },
-  { id: 'a33', type: 'A', factor: 'Crimen organizado', description: 'Contaminación carga.' }
+export const AXES = [
+  'Sostenibilidad',
+  'Excelencia Operativa',
+  'Crecimiento, diversificación y rentabilidad'
 ];
+
+export const CATEGORIES = [
+  'Clientes',
+  'Competidores',
+  'Proveedor y contratistas',
+  'Protección',
+  'Ambiental',
+  'Infraestructura',
+  'Personal',
+  'Requisitos legales y de cliente'
+];
+
+// Mapeo de factores sugeridos por Eje y Categoría
+export const FACTOR_TEMPLATES: Record<string, Record<string, string[]>> = {
+  'Sostenibilidad': {
+    'Clientes': [
+      'Exigencias ambientales del mercado / clientes',
+      'Mayor demanda social por empresas sostenibles',
+      'Relación técnica con clientes',
+      'Gestión reactiva de retroalimentación',
+      'Posicionamiento como operador de excelencia',
+      'Fidelización por seguridad operacional',
+      'Presión por costos',
+      'Riesgo reputacional'
+    ],
+    'Competidores': [
+      'Estrategias competitivas basadas en certificaciones ESG',
+      'Oferta de servicios con menor huella ambiental',
+      'Presión competitiva por innovación sostenible',
+      'Programas de transparencia en reportes ESG de la competencia',
+      'Posicionamiento de marca basado en sostenibilidad'
+    ],
+    'Proveedor y contratistas': [
+      'Dependencia o diversificación de proveedores críticos',
+      'Gestión de riesgos y resiliencia de la cadena de suministro',
+      'Alianzas estratégicas and mejora continua con enfoque sostenible',
+      'Selección de proveedores con estándares ESG',
+      'Política de adquisición de insumos sostenibles',
+      'Certificación ambiental y cumplimiento normativo del proveedor',
+      'Huella ambiental de la cadena de suministro',
+      'Estabilidad financiera del proveedor',
+      'Cumplimiento laboral y ético del proveedor',
+      'Innovación tecnológica disponible en el mercado proveedor',
+      'Capacidad logística y tiempos de respuesta regionales',
+      'Proximidad/localización del proveedor'
+    ],
+    'Protección': [
+      'Preparación ante emergencias ambientales',
+      'Prevención de derrames y contaminación marina',
+      'Uso de tecnología para control ambiental y prevención de incidentes',
+      'Monitoreo tecnológico de seguridad y prevención de contaminación'
+    ],
+    'Ambiental': [
+      'Consumo de combustible y eficiencia energética de la flota',
+      'Gestión de residuos a bordo y en base operativa',
+      'Uso de lubricantes y productos biodegradables',
+      'Huella de carbono de las operaciones',
+      'Gestión de aguas oleosas y sentinas',
+      'Mantenimiento preventivo con enfoque ambiental',
+      'Programas de mejora ambiental y eficiencia operativa',
+      'Gestión y cumplimiento de la huella hídrica en operaciones',
+      'Cumplimiento de normativa ambiental marítima (MARPOL / local)',
+      'Gestión ambiental de proveedores críticos'
+    ],
+    'Infraestructura': [
+      'Eficiencia energética de instalaciones',
+      'Consumo eléctrico de bases operativas',
+      'Uso de energías renovables en infraestructura',
+      'Huella de carbono de instalaciones',
+      'Consumo de agua en infraestructura',
+      'Sistemas de ahorro y reutilización de agua',
+      'Tratamiento de aguas residuales',
+      'Gestión de residuos peligrosos en talleres',
+      'Inversión en modernización sostenible',
+      'Riesgo de contaminación en entorno portuario',
+      'Cumplimiento ambiental de permisos e infraestructura',
+      'Resiliencia ante eventos climáticos extremos'
+    ],
+    'Personal': [
+      'Cultura de seguridad y experiencia multicultural en operaciones regionales',
+      'Programas de capacitación y desarrollo de talento técnico',
+      'Relaciones estables con comunidades portuarias y liderazgo local sólido',
+      'Brechas culturales y comunicación limitada entre países',
+      'Rotación y escasez de talento técnico especializado',
+      'Desigualdad en estándares laborales y de formación interna',
+      'Cooperación e integración cultural entre países del clúster'
+    ],
+    'Requisitos legales y de cliente': [
+      'Sistemas tecnológicos que facilitan cumplimiento ambiental (MARPOL, control emisiones)',
+      'Registros digitales para trazabilidad y auditorías regulatorias',
+      'Infraestructura tecnológica alineada a exigencias regulatorias ambientales',
+      'Automatización de reportes regulatorios ESG',
+      'Nuevas regulaciones ambientales internacionales',
+      'Incentivos y financiamiento para tecnologías limpias',
+      'Estándares internacionales ambientales',
+      'Sanciones por incumplimiento tecnológico-regulatorio',
+      'Brecha entre velocidad regulatoria y capacidad de adaptación'
+    ]
+  },
+  'Excelencia Operativa': {
+    'Clientes': [
+      'Reputación operativa regional',
+      'Relación técnica con clientes',
+      'Variabilidad en estándares de servicio',
+      'Gestión reactiva de retroalimentación',
+      'Posicionamiento como operador de excelencia',
+      'Fidelización por seguridad operacional',
+      'Presión por costos',
+      'Competencia regional',
+      'Riesgo reputacional'
+    ],
+    'Competidores': [
+      'Competencia regional directa',
+      'Presión competitiva en costos y desempeño'
+    ],
+    'Proveedor y contratistas': [
+      'Evaluación de desempeño de proveedores',
+      'Integración con estándares corporativos',
+      'Homologación regional incompleta',
+      'Dependencia de proveedores únicos',
+      'Control irregular de calidad externa',
+      'Desarrollo de red regional de proveedores',
+      'Alianzas técnicas estratégicas',
+      'Interrupción de suministro crítico',
+      'Escasez de repuestos especializados'
+    ],
+    'Protección': [
+      'Baja accidentalidad en personas',
+      'Registro de incidentes',
+      'Incidentes recurrentes',
+      'Reporte insuficiente de eventos',
+      'Análisis de causas limitado',
+      'Sistemas predictivos de seguridad',
+      'Cultura avanzada de reporte sectorial',
+      'Reconocimiento como empresa segura y confiable',
+      'Accidentes mayores',
+      'Impacto reputacional por eventos'
+    ],
+    'Ambiental': [
+      'Programas básicos de control ambiental',
+      'Cumplimiento operativo MARPOL',
+      'Monitoreo ambiental limitado',
+      'Capacitación ambiental insuficiente',
+      'Certificaciones ambientales',
+      'Programas ESG regionales',
+      'Sanciones regulatorias ambientales',
+      'Accidentes ambientales mayores'
+    ],
+    'Infraestructura': [
+      'Bases operativas estratégicas',
+      'Capacidad técnica instalada',
+      'Falta de estandarización',
+      'Cultura débil de orden y aseo',
+      'Mantenimiento reactivo',
+      'Modernización regional',
+      'Inversión en infraestructura crítica',
+      'Eventos climáticos extremos',
+      'Interrupciones operativas'
+    ],
+    'Personal': [
+      'Experiencia operativa acumulada',
+      'Compromiso con seguridad',
+      'Baja confiabilidad humana',
+      'Resistencia al cambio',
+      'Escasez de maquinistas',
+      'Pilotos desalineados',
+      'Cultura débil de disciplina',
+      'Academia regional de formación',
+      'Programas de confiabilidad humana',
+      'Mercado laboral escaso',
+      'Rotación de talento crítico',
+      'Fatiga sectorial'
+    ],
+    'Requisitos legales y de cliente': [
+      'Licencias operativas vigentes',
+      'Cumplimiento regulatorio básico',
+      'Gestión documental fragmentada',
+      'Seguimiento normativo lento',
+      'Armonización legal regional',
+      'Certificaciones internacionales',
+      'Sanciones regulatorias',
+      'Cambios legales abruptos'
+    ]
+  },
+  'Crecimiento, diversificación y rentabilidad': {
+    'Clientes': [
+      'Mayor posicionamiento de mercado',
+      'Contratos a largo plazo',
+      'Licitaciones exitosas',
+      'Gestión de renovación contractual',
+      'Dependencia de clientes estratégicos',
+      'Captación de nuevos clientes como clúster',
+      'Fortalecimiento de operaciones especiales',
+      'Mejora de tarifas',
+      'Competencia regional agresiva',
+      'Presión por reducción de tarifas'
+    ],
+    'Competidores': [
+      'Competencia regional agresiva en precios',
+      'Presión competitiva por contratos estratégicos'
+    ],
+    'Proveedor y contratistas': [
+      'Contratos de largo plazo con proveedores clave',
+      'Integración con políticas de compliance',
+      'Control de calidad de servicios críticos',
+      'Dependencia de proveedores únicos',
+      'Variabilidad de costos externos',
+      'Estandarización regional incompleta',
+      'Desarrollo de red regional de proveedores',
+      'Alianzas estratégicas especializadas',
+      'Interrupción de suministro',
+      'Inestabilidad financiera de proveedores'
+    ],
+    'Protección': [
+      'Riesgos financieros por volatilidad económica',
+      'Restricción de crédito',
+      'Riesgos tributarios regulatorios',
+      'Devaluación monetaria',
+      'Presión sobre márgenes'
+    ],
+    'Ambiental': [
+      'Demanda del mercado por servicios ambientalmente responsables',
+      'Ventajas competitivas derivadas de certificaciones ambientales',
+      'Costos asociados a cumplimiento ambiental como discriminator de precio',
+      'Acceso a incentivos fiscales o financieros por desempeño ambiental',
+      'Posibilidad de nuevos productos/servicios vinculados a sostenibilidad ambiental',
+      'Capacidad de monetizar reducciones de emisiones o créditos ambientales'
+    ],
+    'Infraestructura': [
+      'Capacidad instalada para expansión',
+      'Infraestructura estratégica regional',
+      'Mantenimiento reactivo',
+      'Ineficiencia en uso de activos',
+      'Inversión en modernización',
+      'Expansión regional',
+      'Eventos climáticos',
+      'Interrupciones logísticas'
+    ],
+    'Personal': [
+      'Cultura de excelencia operativa',
+      'Liderazgo regional',
+      'Resistencia al cambio',
+      'Productividad administrativa desigual',
+      'Sobrecarga del equipo financiero',
+      'Desarrollo de talento especializado',
+      'Integración cultural regional',
+      'Mercado laboral competitivo',
+      'Rotación de talento'
+    ],
+    'Requisitos legales y de cliente': [
+      'Políticas sólidas de compliance corporativo',
+      'Transparencia financiera',
+      'Cumplimiento tributario regional',
+      'Gestión contractual internacional',
+      'Complejidad contractual entre países',
+      'Gestión documental pesada',
+      'Adaptación lenta regulatoria',
+      'Incentivos fiscales por país',
+      'Seguridad jurídica regional',
+      'Armonización regulatoria',
+      'Cambios regulatorios abruptos',
+      'Riesgo sancionatorio'
+    ]
+  }
+};
 
 export const TYPE_LABELS: Record<string, string> = {
   F: 'Fortaleza',
@@ -155,10 +289,10 @@ export const TYPE_LABELS: Record<string, string> = {
 };
 
 export const TYPE_COLORS: Record<string, string> = {
-  F: 'bg-green-100 text-green-800 border-green-200',
-  O: 'bg-blue-100 text-blue-800 border-blue-200',
-  D: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  A: 'bg-red-100 text-red-800 border-red-200'
+  F: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  O: 'bg-sky-100 text-sky-800 border-sky-200',
+  D: 'bg-amber-100 text-amber-800 border-amber-200',
+  A: 'bg-rose-100 text-rose-800 border-rose-200'
 };
 
 export const IMPACT_LABELS: Record<number, string> = {
