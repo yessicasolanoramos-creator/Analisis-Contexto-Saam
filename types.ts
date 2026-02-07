@@ -11,15 +11,6 @@ export interface DofaAction {
   effectivenessFollowUp: string;
 }
 
-export interface DofaFactor {
-  id: string;
-  axis: string;
-  category: string;
-  type: DofaType;
-  factor: string;
-  description: string;
-}
-
 export interface DofaRecord {
   id: string;
   country: string;
@@ -40,7 +31,6 @@ export interface Country {
   code: string;
 }
 
-// Tipos para el módulo de Indicadores
 export type IndicatorType = 'Estratégico' | 'Táctico' | 'Operativo';
 
 export interface IndicatorRecord {
