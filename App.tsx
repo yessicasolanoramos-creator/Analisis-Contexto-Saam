@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   LayoutDashboard, 
   BrainCircuit, 
@@ -12,7 +12,10 @@ import {
   ChevronLeft,
   ChevronRight,
   BarChart4,
-  ClipboardList
+  ClipboardList,
+  Cloud,
+  CloudOff,
+  RefreshCw
 } from 'lucide-react';
 import { DofaRecord, IndicatorRecord } from './types';
 import Brainstorming from './components/Brainstorming';
@@ -28,8 +31,47 @@ const App: React.FC = () => {
   const [records, setRecords] = useState<DofaRecord[]>([]);
   const [indicators, setIndicators] = useState<IndicatorRecord[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isCloudEnabled, setIsCloudEnabled] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const fetchFromCloud = useCallback(async () => {
+    const url = localStorage.getItem('sb_url');
+    const key = localStorage.getItem('sb_key');
+    const table = localStorage.getItem('sb_table') || 'dofa_records';
+
+    if (!url || !key) {
+      setIsCloudEnabled(false);
+      return;
+    }
+
+    setIsCloudEnabled(true);
+    setIsSyncing(true);
+    
+    try {
+      const response = await fetch(`${url}/rest/v1/${table}?select=*`, {
+        headers: {
+          'apikey': key,
+          'Authorization': `Bearer ${key}`
+        }
+      });
+      
+      if (response.ok) {
+        const cloudData = await response.json();
+        if (cloudData && Array.isArray(cloudData)) {
+          // Combinar datos locales con los de la nube (preferir los de la nube si hay conflicto)
+          setRecords(cloudData);
+          localStorage.setItem('dofa_records', JSON.stringify(cloudData));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching from Supabase:", error);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, []);
 
   useEffect(() => {
+    // Carga inicial local
     const savedRecords = localStorage.getItem('dofa_records');
     if (savedRecords) {
       try {
@@ -47,7 +89,14 @@ const App: React.FC = () => {
         console.error("Error loading indicators", e);
       }
     }
-  }, []);
+
+    // Intentar carga desde la nube
+    fetchFromCloud();
+
+    // Polling opcional cada 60 segundos para mantener datos frescos de otros usuarios
+    const interval = setInterval(fetchFromCloud, 60000);
+    return () => clearInterval(interval);
+  }, [fetchFromCloud]);
 
   useEffect(() => {
     localStorage.setItem('dofa_records', JSON.stringify(records));
@@ -59,15 +108,45 @@ const App: React.FC = () => {
 
   const addRecord = (newRecord: DofaRecord) => {
     setRecords(prev => [...prev, newRecord]);
+    // Si la nube está activa, intentar subir inmediatamente
+    syncToCloud([...records, newRecord]);
   };
 
   const updateRecord = (updatedRecord: DofaRecord) => {
-    setRecords(prev => prev.map(r => r.id === updatedRecord.id ? updatedRecord : r));
+    const newRecords = records.map(r => r.id === updatedRecord.id ? updatedRecord : r);
+    setRecords(newRecords);
+    syncToCloud(newRecords);
   };
 
   const deleteRecord = (id: string) => {
     if (window.confirm('¿Está seguro de eliminar este registro?')) {
-      setRecords(prev => prev.filter(r => r.id !== id));
+      const newRecords = records.filter(r => r.id !== id);
+      setRecords(newRecords);
+      // Opcional: Implementar delete en supabase o re-subir todo
+      syncToCloud(newRecords);
+    }
+  };
+
+  const syncToCloud = async (dataToSync: DofaRecord[]) => {
+    const url = localStorage.getItem('sb_url');
+    const key = localStorage.getItem('sb_key');
+    const table = localStorage.getItem('sb_table') || 'dofa_records';
+    
+    if (!url || !key) return;
+
+    try {
+      await fetch(`${url}/rest/v1/${table}`, {
+        method: 'POST',
+        headers: {
+          'apikey': key,
+          'Authorization': `Bearer ${key}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(dataToSync)
+      });
+    } catch (e) {
+      console.error("Background sync failed", e);
     }
   };
 
@@ -133,6 +212,27 @@ const App: React.FC = () => {
             </button>
           ))}
         </nav>
+
+        {/* Indicador de Nube */}
+        <div className="p-6 border-t border-slate-800 min-w-[280px]">
+          <div className={`flex items-center justify-between p-4 rounded-2xl ${isCloudEnabled ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-500'}`}>
+            <div className="flex items-center gap-3">
+              {isCloudEnabled ? <Cloud size={18} /> : <CloudOff size={18} />}
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                {isCloudEnabled ? 'Cloud Conectado' : 'Modo Local'}
+              </span>
+            </div>
+            {isCloudEnabled && (
+              <button 
+                onClick={fetchFromCloud}
+                disabled={isSyncing}
+                className={`${isSyncing ? 'animate-spin' : ''} hover:text-white transition-colors`}
+              >
+                <RefreshCw size={14} />
+              </button>
+            )}
+          </div>
+        </div>
       </aside>
 
       <main className={`flex-1 p-4 md:p-8 lg:p-12 overflow-auto transition-all ${!isSidebarOpen ? 'md:pl-20' : ''}`}>
@@ -143,7 +243,7 @@ const App: React.FC = () => {
           {activeModule === 'tasks' && <TasksView records={records} onUpdateRecord={updateRecord} />}
           {activeModule === 'indicators' && <IndicatorsView indicators={indicators} onAddIndicator={addIndicator} onDeleteIndicator={deleteIndicator} />}
           {activeModule === 'consolidated_indicators' && <ConsolidatedIndicatorsView indicators={indicators} onDeleteIndicator={deleteIndicator} />}
-          {activeModule === 'settings' && <Configuration records={records} indicators={indicators} />}
+          {activeModule === 'settings' && <Configuration records={records} indicators={indicators} onRefreshCloud={fetchFromCloud} />}
         </div>
       </main>
     </div>
