@@ -34,10 +34,18 @@ const App: React.FC = () => {
   const [isCloudEnabled, setIsCloudEnabled] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
 
+  // Obtener credenciales (Prioridad: LocalStorage > Env Vars)
+  const getCloudCredentials = () => {
+    return {
+      url: localStorage.getItem('sb_url') || (import.meta as any).env?.VITE_SUPABASE_URL || '',
+      key: localStorage.getItem('sb_key') || (import.meta as any).env?.VITE_SUPABASE_KEY || '',
+      tableDofa: 'dofa_records',
+      tableIndicators: 'indicators_records'
+    };
+  };
+
   const fetchFromCloud = useCallback(async () => {
-    const url = localStorage.getItem('sb_url');
-    const key = localStorage.getItem('sb_key');
-    const table = localStorage.getItem('sb_table') || 'dofa_records';
+    const { url, key, tableDofa, tableIndicators } = getCloudCredentials();
 
     if (!url || !key) {
       setIsCloudEnabled(false);
@@ -48,116 +56,104 @@ const App: React.FC = () => {
     setIsSyncing(true);
     
     try {
-      const response = await fetch(`${url}/rest/v1/${table}?select=*`, {
-        headers: {
-          'apikey': key,
-          'Authorization': `Bearer ${key}`
-        }
+      // Fetch DOFA Records
+      const resDofa = await fetch(`${url}/rest/v1/${tableDofa}?select=*`, {
+        headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
       });
-      
-      if (response.ok) {
-        const cloudData = await response.json();
-        if (cloudData && Array.isArray(cloudData)) {
-          // Combinar datos locales con los de la nube (preferir los de la nube si hay conflicto)
-          setRecords(cloudData);
-          localStorage.setItem('dofa_records', JSON.stringify(cloudData));
+      if (resDofa.ok) {
+        const data = await resDofa.json();
+        if (Array.isArray(data)) {
+          setRecords(data);
+          localStorage.setItem('dofa_records', JSON.stringify(data));
+        }
+      }
+
+      // Fetch Indicators
+      const resInd = await fetch(`${url}/rest/v1/${tableIndicators}?select=*`, {
+        headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
+      });
+      if (resInd.ok) {
+        const data = await resInd.json();
+        if (Array.isArray(data)) {
+          setIndicators(data);
+          localStorage.setItem('saam_indicators', JSON.stringify(data));
         }
       }
     } catch (error) {
-      console.error("Error fetching from Supabase:", error);
+      console.error("Cloud Sync Error:", error);
     } finally {
       setIsSyncing(false);
     }
   }, []);
 
   useEffect(() => {
-    // Carga inicial local
     const savedRecords = localStorage.getItem('dofa_records');
-    if (savedRecords) {
-      try {
-        setRecords(JSON.parse(savedRecords));
-      } catch (e) {
-        console.error("Error loading records", e);
-      }
-    }
+    if (savedRecords) { try { setRecords(JSON.parse(savedRecords)); } catch (e) {} }
 
     const savedIndicators = localStorage.getItem('saam_indicators');
-    if (savedIndicators) {
-      try {
-        setIndicators(JSON.parse(savedIndicators));
-      } catch (e) {
-        console.error("Error loading indicators", e);
-      }
-    }
+    if (savedIndicators) { try { setIndicators(JSON.parse(savedIndicators)); } catch (e) {} }
 
-    // Intentar carga desde la nube
     fetchFromCloud();
-
-    // Polling opcional cada 60 segundos para mantener datos frescos de otros usuarios
     const interval = setInterval(fetchFromCloud, 60000);
     return () => clearInterval(interval);
   }, [fetchFromCloud]);
 
-  useEffect(() => {
-    localStorage.setItem('dofa_records', JSON.stringify(records));
-  }, [records]);
-
-  useEffect(() => {
-    localStorage.setItem('saam_indicators', JSON.stringify(indicators));
-  }, [indicators]);
-
   const addRecord = (newRecord: DofaRecord) => {
-    setRecords(prev => [...prev, newRecord]);
-    // Si la nube está activa, intentar subir inmediatamente
-    syncToCloud([...records, newRecord]);
+    const updated = [...records, newRecord];
+    setRecords(updated);
+    syncDofa(updated);
   };
 
   const updateRecord = (updatedRecord: DofaRecord) => {
     const newRecords = records.map(r => r.id === updatedRecord.id ? updatedRecord : r);
     setRecords(newRecords);
-    syncToCloud(newRecords);
+    syncDofa(newRecords);
   };
 
   const deleteRecord = (id: string) => {
     if (window.confirm('¿Está seguro de eliminar este registro?')) {
       const newRecords = records.filter(r => r.id !== id);
       setRecords(newRecords);
-      // Opcional: Implementar delete en supabase o re-subir todo
-      syncToCloud(newRecords);
+      syncDofa(newRecords);
     }
   };
 
-  const syncToCloud = async (dataToSync: DofaRecord[]) => {
-    const url = localStorage.getItem('sb_url');
-    const key = localStorage.getItem('sb_key');
-    const table = localStorage.getItem('sb_table') || 'dofa_records';
-    
+  const syncDofa = async (data: DofaRecord[]) => {
+    const { url, key, tableDofa } = getCloudCredentials();
     if (!url || !key) return;
-
     try {
-      await fetch(`${url}/rest/v1/${table}`, {
+      await fetch(`${url}/rest/v1/${tableDofa}`, {
         method: 'POST',
-        headers: {
-          'apikey': key,
-          'Authorization': `Bearer ${key}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates'
-        },
-        body: JSON.stringify(dataToSync)
+        headers: { 'apikey': key, 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify(data)
       });
-    } catch (e) {
-      console.error("Background sync failed", e);
-    }
+    } catch (e) {}
   };
 
   const addIndicator = (newIndicator: IndicatorRecord) => {
-    setIndicators(prev => [...prev, newIndicator]);
+    const updated = [...indicators, newIndicator];
+    setIndicators(updated);
+    syncIndicators(updated);
   };
 
   const deleteIndicator = (id: string) => {
     if (window.confirm('¿Desea eliminar este indicador?')) {
-      setIndicators(prev => prev.filter(i => i.id !== id));
+      const updated = indicators.filter(i => i.id !== id);
+      setIndicators(updated);
+      syncIndicators(updated);
     }
+  };
+
+  const syncIndicators = async (data: IndicatorRecord[]) => {
+    const { url, key, tableIndicators } = getCloudCredentials();
+    if (!url || !key) return;
+    try {
+      await fetch(`${url}/rest/v1/${tableIndicators}`, {
+        method: 'POST',
+        headers: { 'apikey': key, 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify(data)
+      });
+    } catch (e) {}
   };
 
   const navItems = [
@@ -213,7 +209,6 @@ const App: React.FC = () => {
           ))}
         </nav>
 
-        {/* Indicador de Nube */}
         <div className="p-6 border-t border-slate-800 min-w-[280px]">
           <div className={`flex items-center justify-between p-4 rounded-2xl ${isCloudEnabled ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-500'}`}>
             <div className="flex items-center gap-3">
