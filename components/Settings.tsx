@@ -1,14 +1,15 @@
 
 import React, { useState } from 'react';
-import { Download, Database, Save, CheckCircle2, AlertTriangle, ExternalLink, FileSpreadsheet, BarChart4 } from 'lucide-react';
+import { Download, Database, Save, CheckCircle2, AlertTriangle, ExternalLink, FileSpreadsheet, BarChart4, RefreshCw } from 'lucide-react';
 import { DofaRecord, IndicatorRecord } from '../types';
 
 interface SettingsProps {
   records: DofaRecord[];
   indicators: IndicatorRecord[];
+  onRefreshCloud?: () => void;
 }
 
-const Configuration: React.FC<SettingsProps> = ({ records, indicators }) => {
+const Configuration: React.FC<SettingsProps> = ({ records, indicators, onRefreshCloud }) => {
   const [supabaseUrl, setSupabaseUrl] = useState(localStorage.getItem('sb_url') || '');
   const [supabaseKey, setSupabaseKey] = useState(localStorage.getItem('sb_key') || '');
   const [supabaseTable, setSupabaseTable] = useState(localStorage.getItem('sb_table') || 'dofa_records');
@@ -98,6 +99,7 @@ const Configuration: React.FC<SettingsProps> = ({ records, indicators }) => {
       localStorage.setItem('sb_key', supabaseKey);
       localStorage.setItem('sb_table', supabaseTable);
 
+      // Sincronización: Subir datos locales
       const response = await fetch(`${supabaseUrl}/rest/v1/${supabaseTable}`, {
         method: 'POST',
         headers: {
@@ -111,6 +113,11 @@ const Configuration: React.FC<SettingsProps> = ({ records, indicators }) => {
 
       if (!response.ok) {
         throw new Error(`Error en sincronización: ${response.statusText}`);
+      }
+
+      // Después de subir, forzar descarga de lo que hay en la nube (incluyendo lo de otros)
+      if (onRefreshCloud) {
+        onRefreshCloud();
       }
 
       setSyncStatus('success');
@@ -190,21 +197,29 @@ const Configuration: React.FC<SettingsProps> = ({ records, indicators }) => {
               />
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 flex gap-3">
               <button 
                 onClick={handleSupabaseSync}
                 disabled={syncStatus === 'syncing'}
-                className={`w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-3 transition-all shadow-lg
+                className={`flex-1 py-5 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-3 transition-all shadow-lg
                   ${syncStatus === 'syncing' ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 
                     syncStatus === 'success' ? 'bg-emerald-500 text-white' : 'bg-slate-900 text-white hover:bg-black'}
                 `}
               >
                 {syncStatus === 'syncing' ? 'Sincronizando...' : 
                  syncStatus === 'success' ? (
-                   <><CheckCircle2 size={18} /> Sincronizado</>
+                   <><CheckCircle2 size={18} /> Listo</>
                  ) : (
-                   <><Save size={18} className="text-sky-400" /> Sincronizar con Cloud</>
+                   <><Save size={18} className="text-sky-400" /> Guardar y Sincronizar</>
                  )}
+              </button>
+              
+              <button 
+                onClick={() => onRefreshCloud?.()}
+                className="p-5 bg-sky-100 text-sky-600 rounded-2xl hover:bg-sky-600 hover:text-white transition-all shadow-lg"
+                title="Refrescar datos de la nube"
+              >
+                <RefreshCw size={20} />
               </button>
             </div>
 
@@ -223,7 +238,7 @@ const Configuration: React.FC<SettingsProps> = ({ records, indicators }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-4">
             <p className="text-xs text-slate-300 leading-relaxed font-medium">
-              Los archivos exportados utilizan punto y coma (;) como separador para asegurar la compatibilidad con las configuraciones regionales de Microsoft Excel.
+              Sincronización colaborativa: Al conectar con Supabase, la aplicación descargará automáticamente los registros creados por otros usuarios cada 60 segundos o al iniciar sesión.
             </p>
             <div className="flex items-center gap-2 text-sky-400 text-xs font-black">
               <ExternalLink size={14} />
